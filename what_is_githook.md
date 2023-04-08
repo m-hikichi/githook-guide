@@ -63,6 +63,38 @@ Git Hookスクリプトは、通常、シェルスクリプトで書かれてい
 これにより，Pythonのインタープリタがスクリプトを解釈するようになります．シバン行は，スクリプトの先頭に記述することで，自動的に使用するインタープリタを指定できるため，スクリプトの実行方法を簡単かつ一貫性のあるものにすることができます．
 
 
-## Hookの範囲
+## Git Hookの範囲
 
-Hookは，特定のGitリポジトリ内でのみ有効で，，`git clone`を実行しても新しいリポジトリにコピーされません．また，そのリポジトリへのアクセス権を持っている人であれば，誰でもHookを変更できます．
+Git Hookは，特定のGitリポジトリ内でのみ有効で，`git clone`を実行しても新しいリポジトリにコピーされません．しかし，Hookの設定をチーム内に共有し，ルール化することができます．
+### 共有するGit Hookの作成手順
+1. リポジトリルートに`.githooks`ディレクトリを作成します．このディレクトリはGit Hookスクリプトファイルを置く場所となります．
+```bash
+mkdir .githooks
+```
+2. `.githooks`ディレクトリにGit Hookスクリプトファイルを作成します．Git Hookの種類に応じて，スクリプトファイルを作成します．例えば，`pre-commit`フックを設定したい場合は，`.githooks/pre-commit`というファイルを作成します．
+```bash
+touch .githooks/pre-commit
+```
+3. Git Hookスクリプトファイルに実行権限を付与します．
+```bash
+chmod +x .githooks/*
+```
+
+### Git Hookの参照先の変更
+
+Git Hookの参照先デフォルトパスは`.git/hooks`ですが，`core.hooksPath`を設定することで`.githooks`ディレクトリに変更することができます．
+1. Git Hookの参照先を`.githooks`に変更します．
+```bash
+git config --local core.hooksPath .githooks
+```
+2. Git Hookの参照先を確認するには，以下のコマンドを実行します．表示されるリストの中にて`core.hookspath=.githooks`となっていれば，参照先が`.githooks`に変更されていることを確認できます．
+```bash
+git config --local --list
+```
+以上の設定を行うことで，リポジトリ内で共有されているHookスクリプトを使うことができます．プロジェクトに参加するメンバーは，最初に上記のコマンドを実行する必要がありますが，以後はプロジェクト内で作られGit管理されているHookスクリプトが適用されます．これにより，Hookスクリプト自体のメンテナンス性も上がります．
+
+#### Git Hookの参照先をデフォルトに戻す
+Git Hookの参照先をデフォルトに戻す場合は，以下のコマンドを実行します．
+```bash
+git config --local core.hooksPath .git/hooks
+```
