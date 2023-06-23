@@ -37,7 +37,6 @@ if [ "${code}" -ne 0 ]; then
   exit 1
 else
   echo -e "\033[32mSUCCESS\033[0m"
-  exit 0
 fi
 ```
 
@@ -45,9 +44,15 @@ fi
 ## ファイルをaddし忘れている場合commitを中止する
 
 ```bash
+echo -e "- Checking for any un-added files..."
 if git status --porcelain | grep -q '^??'; then
-  echo "Some files are untracked. Please add them before committing."
+  echo -e "\033[31mERROR: Some files are untracked. Please add them before commit.\033[0m"
   exit 1
+elif git status --porcelain | grep -qE '^.(A|M|D|R|C|U)'; then
+  echo -e "\033[31mERROR: Some files have been modified but not added. Please add them before commit.\033[0m"
+  exit 1
+else
+  echo -e "\033[32mSUCCESS\033[0m"
 fi
 ```
 
