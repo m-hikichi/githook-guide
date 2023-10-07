@@ -67,7 +67,7 @@ echo -e "- Checking if the commit message contains a prefix..."
 MSG="$(cat "$1")"
 
 # 正しいPrefixの配列を定義
-CORRECT_PREFIXES=("feat" "fix" "docs" "style" "refactor" "pref" "test" "chore")
+CORRECT_PREFIXES=("feat" "fix" "docs" "style" "refactor" "perf" "test" "chore")
 
 # コミットメッセージが正しいPrefixで始まっているかをチェックする
 if ! printf "%s\n" "${CORRECT_PREFIXES[@]}" | grep -qw "$(echo "$MSG" | cut -d' ' -f1 | sed 's/:$//')"; then
